@@ -17,33 +17,51 @@ app.use(bodyParse.json())
 
 app.use(function (req, res, next) {
     if (req.method == 'OPTIONS') {
-      //处理遇检请求   复杂请求会提前发送一个遇检请求  method为OPTIONS
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'content-type');
-      res.status(200).end();
+        //处理预检请求
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        res.setHeader('Access-Control-Allow-Credentials', true);
+        res.status(200).end();
     } else {
-        res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+        res.setHeader('Access-Control-Allow-Credentials', true);
         next();
     }
 });
 
-// app.use('/login', verifyToken);
+app.get('/login', (req, res, next) => {
+    res.status(200).end(JSON.stringify({'token': '服务器启动'}))
+})
 
 app.post('/login', (req, res, next) => {
     const body = req.body;
     let token = ''
     if (req.headers.authorization) {
         console.log(9999);
-        verifyToken();
+         // 进行验证并处理验证结果
+         if (verifyToken(req, res, next)) {
+            // 验证通过
+            // 省略部分代码...
+            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Powered-By': 'bacon', 'authorization': '' });
+            res.status(200).end(JSON.stringify({'token': token}))
+        } else {
+            // 验证失败，返回错误响应
+            res.status(401).json({ error: 'Authorization failed' });
+        }
     } else {
         if (body.username === data.username && body.password === data.password) {
-            console.log('1234565')
             token = generateToken({username: body.username})
             console.log(token,'token');
-            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Powered-By': 'bacon' });
+            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Powered-By': 'bacon', 'authorization': '' });
             res.status(200).end(JSON.stringify({'token': token}))
+        } else {
+            res.status(401).end(JSON.stringify({'mas': '账号密码错误'}))
         }
     }
 })
-app.listen(3002);
+app.listen(3002,() => {
+    console.log('服务器启动');
+});
