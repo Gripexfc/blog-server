@@ -1,16 +1,11 @@
-/*
- * @Author: fanchen 2837903280@qq.com
- * @Date: 2023-06-29 17:18:06
- * @LastEditors: fanchen 2837903280@qq.com
- * @LastEditTime: 2023-06-30 17:18:59
- * @FilePath: \blogServer\index.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
+
 const express = require('express');
 const app = express();
 const bodyParse = require('body-parser')
-const data = require('./index.json')
+require('./app/models/db')
 const userRouter = require('./app/route/useRouter');
+const userPost = require('./app/route/userPost');
+const useReview = require('./app/route/review');
 
 app.use(bodyParse.urlencoded({extended:false}))
 app.use(bodyParse.json())
@@ -33,11 +28,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/blogUsers', userRouter)
+app.use('/userPost', userPost)
+app.use('/post', useReview)
 
-app.post('/login', (req, res, next) => {
-    console.log(res.body,'-----');
-    console.log(req.body,'-----------');
-})
 app.listen(3002,() => {
     console.log('服务器启动');
 });
