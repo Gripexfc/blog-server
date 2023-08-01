@@ -1,17 +1,17 @@
 const express = require('express');
 const {generateToken, verifyToken} = require('../login/authorization')
 const route = express.Router();
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/blog');
-mongoose.connection.on('connected',function(){
-    console.log('连接成功');
-});
-mongoose.connection.on('error',function(){
-    console.log('连接失败');
-});
-mongoose.connection.on('disconnected',function(){
-    console.log('连接断开');
-});
+const mongoose = require('mongoose')
+// mongoose.connect('mongodb://127.0.0.1:27017/blog');
+// mongoose.connection.on('connected',function(){
+//     console.log('连接成功');
+// });
+// mongoose.connection.on('error',function(){
+//     console.log('连接失败');
+// });
+// mongoose.connection.on('disconnected',function(){
+//     console.log('连接断开');
+// });
 
 const userSchema = new mongoose.Schema({
   // password: { type: String, required: true, select: false }, // 使用 select: false 隐藏密码字段
@@ -25,11 +25,10 @@ async function findPasswordByUsername(username) {
   try {
   // 使用 User 模型的 findOne 方法查询数据库
   const user = JSON.parse(JSON.stringify(await UserModel.findOne({ username })));
-
   // console.log(user.email,'user1');
   if (user) {
   // 如果找到用户，则返回用户的密码
-  return user.password;
+  return user;
   } else {
   // 如果未找到用户，则返回 null 或自定义的默认值
   return null;
@@ -43,10 +42,11 @@ async function findPasswordByUsername(username) {
 
 route.post('/login', async (res, req, next) => {
   const body = res.body;
+  
     let token = ''
-    if (req.headers?.authorization) {
-        console.log(9999);
+    if (res.headers?.authorization) {
          // 进行验证并处理验证结果
+         console.log(verifyToken(req, res, next));
          if (verifyToken(req, res, next)) {
             // 验证通过
             // 省略部分代码...
@@ -56,10 +56,10 @@ route.post('/login', async (res, req, next) => {
             req.status(401).json({ error: 'Authorization failed' });
         }
     } else {
-        const password = await findPasswordByUsername(body.username);
-        console.log(password,'password');
-        if (body.password === password) {
-            token = generateToken({username: body.username})
+      console.log('验证账号密码');
+        const user = await findPasswordByUsername(body.username);
+        if (body.password === user.password) {
+            token = generateToken({username: body.username, userId: user._id})
             req.writeHead(200, { 'Content-Type': 'application/json', 'X-Powered-By': 'bacon', 'authorization': '' });
             req.status(200).end(JSON.stringify({'token': token}))
         } else {
