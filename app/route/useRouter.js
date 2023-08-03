@@ -2,16 +2,6 @@ const express = require('express');
 const {generateToken, verifyToken} = require('../login/authorization')
 const route = express.Router();
 const mongoose = require('mongoose')
-// mongoose.connect('mongodb://127.0.0.1:27017/blog');
-// mongoose.connection.on('connected',function(){
-//     console.log('连接成功');
-// });
-// mongoose.connection.on('error',function(){
-//     console.log('连接失败');
-// });
-// mongoose.connection.on('disconnected',function(){
-//     console.log('连接断开');
-// });
 
 const userSchema = new mongoose.Schema({
   // password: { type: String, required: true, select: false }, // 使用 select: false 隐藏密码字段

@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/blogUsers', userRouter)
-app.use('/userPost', userPost)
+app.use('/post', userPost)
 app.use('/post', useReview)
 
 app.listen(3002,() => {

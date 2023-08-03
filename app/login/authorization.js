@@ -25,3 +25,8 @@ module.exports.verifyToken = function (req, res, next) {
     }
   });
 };
+
+module.exports.getTokenData = (tokenStr) => {
+  const token = tokenStr.split(" ")[1];
+  return jwt.verify(token, secretKey);
+}
