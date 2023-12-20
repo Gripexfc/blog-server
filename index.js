@@ -11,6 +11,8 @@ const app = express();
 const bodyParse = require('body-parser')
 const data = require('./index.json')
 const userRouter = require('./app/route/useRouter');
+const articleROUTER = require('./app/articlePost/editArticle')
+// require('./app/shell/article.js')
 
 app.use(bodyParse.urlencoded({extended:false}))
 app.use(bodyParse.json())
@@ -18,13 +20,13 @@ app.use(bodyParse.json())
 app.use(function (req, res, next) {
     if (req.method == 'OPTIONS') {
         //处理预检请求
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
         res.setHeader('Access-Control-Allow-Credentials', true);
         res.status(200).end();
     } else {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
         res.setHeader('Access-Control-Allow-Credentials', true);
@@ -33,11 +35,12 @@ app.use(function (req, res, next) {
 });
 
 app.use('/blogUsers', userRouter)
+app.use('/article', articleROUTER)
 
-app.post('/login', (req, res, next) => {
+app.get('/login', (req, res, next) => {
     console.log(res.body,'-----');
     console.log(req.body,'-----------');
 })
-app.listen(3002,() => {
+app.listen(8090,() => {
     console.log('服务器启动');
 });

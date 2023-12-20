@@ -1,4 +1,28 @@
-const mongoos = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+// 创建 MongoDB 连接
+// mongoose.connect('mongodb://localhost:27017/blog', { useNewUrlParser: true, useUnifiedTopology: true });
+
+// 定义用户模型
+const userSchema = new Schema({
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    account_number: { type: String, unique: true, required: true },
+    article_id: { type: Schema.Types.ObjectId, ref: 'Article' }, // 关联文章的ID，假设有一个 Article 模型
+    user_avatar: { type: String },
+    position: { type: String },
+    description: { type: String },
+    extension_field1: { type: String },
+    extension_field2: { type: Number },
+    extension_field3: { type: Date },
+    created_at: { type: Date, default: Date.now }
+});
+
+// 创建 User 模型
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
 
 
 
