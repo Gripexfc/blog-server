@@ -10,8 +10,9 @@ const express = require('express');
 const app = express();
 const bodyParse = require('body-parser')
 const data = require('./index.json')
-const userRouter = require('./app/route/useRouter');
-const articleROUTER = require('./app/articlePost/editArticle')
+// const userRouter = require('./app/route/useRouter');
+const articleRouter = require('./app/articlePost/editArticle')
+const loginRouter = require('./app/login/index')
 // require('./app/shell/article.js')
 
 app.use(bodyParse.urlencoded({extended:false}))
@@ -34,13 +35,9 @@ app.use(function (req, res, next) {
     }
 });
 
-app.use('/blogUsers', userRouter)
-app.use('/article', articleROUTER)
+app.use('/login', loginRouter)
+app.use('/article', articleRouter)
 
-app.get('/login', (req, res, next) => {
-    console.log(res.body,'-----');
-    console.log(req.body,'-----------');
-})
 app.listen(8090,() => {
     console.log('服务器启动');
 });

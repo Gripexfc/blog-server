@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
-const User = require('../models/users')
+const User = require('../models/user')
+mongoose.connect('mongodb://127.0.0.1:27017/blog');
+mongoose.connection.on('connected',function(){
+    console.log('连接成功');
+});
+mongoose.connection.on('error',function(){
+    console.log('连接失败');
+});
+mongoose.connection.on('disconnected',function(){
+    console.log('连接断开');
+});
 
 // const mongoose = require('mongoose');
 // const User = require('./userModel'); // 确保路径正确
@@ -9,9 +19,9 @@ const User = require('../models/users')
 
 // 创建 User 模型实例
 const newUser = new User({
-    username: 'example_user',
-    password: 'secure_password',
-    account_number: '123456789',
+    username: 'goodEat',
+    password: '123456',
+    account_number: '12345678901',
     article_id: new mongoose.Types.ObjectId(), // 自动生成一个 ObjectId 作为示例
     user_avatar: 'path/to/avatar.jpg',
     position: 'Software Engineer',
