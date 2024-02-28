@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 const Article = require('../models/article')
-
-// const mongoose = require('mongoose');
-// const Article = require('./articleModel'); // 确保路径正确
-
-// mongoose.connect('mongodb://localhost:27017/your_database_name', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/blog');
+mongoose.connection.on('connected',function(){
+    console.log('连接成功');
+});
+mongoose.connection.on('error',function(){
+    console.log('连接失败');
+});
+mongoose.connection.on('disconnected',function(){
+    console.log('连接断开');
+});
 
 // 假设这是一个有效的用户 ObjectId，请替换为实际的用户 ObjectId
 const userId = new mongoose.Types.ObjectId();
@@ -21,7 +26,8 @@ const newArticle = new Article({
     otherUserInfo: 'Some information about the user',
     extensionField1: 'Value 1',
     extensionField2: 42,
-    extensionField3: new Date()
+    extensionField3: new Date(),
+    imageUrl: 'https://img1.baidu.com/it/u=764650591,834555155&fm=253&fmt=auto&app=138&f=JPG?w=500&h=281'
 });
 
 newArticle.save()
