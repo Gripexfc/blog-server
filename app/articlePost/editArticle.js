@@ -57,7 +57,7 @@ router.post('/all', async (req, res) => {
         // 使用 Article 模型的 find 方法查询所有文章
         const articles = await Article.find().sort({ created_at: -1 });
 
-        res.json({ success: true, articles });
+        res.json({ success: true, data: articles });
     } catch (error) {
         console.error('查询文章时出现错误:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });

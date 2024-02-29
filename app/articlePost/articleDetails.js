@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const Article = require('../models/article');
 
-router.post('/details:id', async (req, res) => {
+router.post('/details/:id', async (req, res) => {
     try {
         const id = req.params.id;
 
